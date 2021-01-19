@@ -1,8 +1,9 @@
 // Copyright Michael Barnes 2020
 
 
-#include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
+#include "DrawDebugHelpers.h"
+#include "GameFramework/PlayerController.h"
 #include "Grabber.h"
 
 #define OUT
@@ -39,7 +40,24 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewpointLocation, OUT PlayerViewpointRotation);
 
 	// Logging out to test
-	UE_LOG(LogTemp, Warning, TEXT("Location: %s Rotation: %s"), *PlayerViewpointLocation.ToString(), *PlayerViewpointRotation.ToString());
+	// UE_LOG(LogTemp, Warning, TEXT("Location: %s Rotation: %s"),
+	// 	*PlayerViewpointLocation.ToString(),
+	// 	*PlayerViewpointRotation.ToString()
+	// );
+
+	// Draw a line from player showing the reach
+	FVector LineTraceEnd = PlayerViewpointLocation + PlayerViewpointRotation.Vector() * Reach;
+	
+	DrawDebugLine(
+		GetWorld(),
+		PlayerViewpointLocation,
+		LineTraceEnd,
+		FColor(0, 255, 0),
+		false,
+		0.f,
+		0,
+		5.f
+	);
 
 	// Ray-cast out to a certain distance (reach)
 
